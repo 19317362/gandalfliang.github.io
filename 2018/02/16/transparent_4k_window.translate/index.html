@@ -3,15 +3,22 @@
 <head>
     <meta charset="utf-8">
     
-    <title>标签: 通用计算 | gandalfliang的个人博客</title>
+    <title>【翻译】关于 WPF 透明窗口的内存占用 | gandalfliang的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta property="og:type" content="website">
-<meta property="og:title" content="gandalfliang的个人博客">
-<meta property="og:url" content="http://gandalfliang.me/tags/通用计算/index.html">
+    <meta name="description" content="翻译自己的文章才是最骚的。。。  Origin Post  要实现一个透明的 WPF 窗口？多么简单的一个任务啊！只要设置 AllowTransparency 和 WindowStyle，你可以在毫秒间完成这个任务。   AllowTransparency=&amp;quot;True&amp;quot; WindowStyle=&amp;quot;None&amp;quot; Background=&amp;quot;Transpa">
+<meta name="keywords" content="WPF,翻译,LayeredWindow,Performance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【翻译】关于 WPF 透明窗口的内存占用">
+<meta property="og:url" content="http://gandalfliang.me/2018/02/16/transparent_4k_window.translate/index.html">
 <meta property="og:site_name" content="gandalfliang的个人博客">
+<meta property="og:description" content="翻译自己的文章才是最骚的。。。  Origin Post  要实现一个透明的 WPF 窗口？多么简单的一个任务啊！只要设置 AllowTransparency 和 WindowStyle，你可以在毫秒间完成这个任务。   AllowTransparency=&amp;quot;True&amp;quot; WindowStyle=&amp;quot;None&amp;quot; Background=&amp;quot;Transpa">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.iconshock.com/img_vista/FLAT/project_management/jpg/acceleration_graphic2_icon.jpg">
+<meta property="og:updated_time" content="2018-02-16T17:35:09.058Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="gandalfliang的个人博客">
+<meta name="twitter:title" content="【翻译】关于 WPF 透明窗口的内存占用">
+<meta name="twitter:description" content="翻译自己的文章才是最骚的。。。  Origin Post  要实现一个透明的 WPF 窗口？多么简单的一个任务啊！只要设置 AllowTransparency 和 WindowStyle，你可以在毫秒间完成这个任务。   AllowTransparency=&amp;quot;True&amp;quot; WindowStyle=&amp;quot;None&amp;quot; Background=&amp;quot;Transpa">
+<meta name="twitter:image" content="http://www.iconshock.com/img_vista/FLAT/project_management/jpg/acceleration_graphic2_icon.jpg">
     
 
     
@@ -178,50 +185,160 @@
 </aside>
 
             
-            <section id="main">
-<div class="timeline timeline-wrap">
-    <div class="timeline-row timeline-row-major">
-        <span class="node"><i class="fa fa-tag"></i></span>
-        <h1 class="title">#通用计算</h1>
-    </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+            <section id="main"><article id="post-transparent_4k_window.translate" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
                 
     
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2017/03/11/OpenCLwithCLOO/">OpenCL with CLOO</a>
+        <h1 class="article-title" itemprop="name">
+            【翻译】关于 WPF 透明窗口的内存占用
         </h1>
     
 
-                <div class="article-meta">
-                    
+                
+                    <div class="article-meta">
+                        
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2017/03/11/OpenCLwithCLOO/">
-            <time datetime="2017-03-12T02:19:30.000Z" itemprop="datePublished">2017-03-11</time>
+        <a href="/2018/02/16/transparent_4k_window.translate/">
+            <time datetime="2018-02-17T04:01:38.000Z" itemprop="datePublished">2018-02-16</time>
         </a>
     </div>
 
 
-                    
+                        
     <div class="article-category">
     	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/技术/">技术</a>
+        <a class="article-category-link" href="/categories/翻译-技术/">翻译,技术</a>
     </div>
 
-                    
+                        
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/CLOO/">CLOO</a>, <a class="tag-link" href="/tags/OpenCL/">OpenCL</a>, <a class="tag-link" href="/tags/通用计算/">通用计算</a>
+        <a class="tag-link" href="/tags/LayeredWindow/">LayeredWindow</a>, <a class="tag-link" href="/tags/Performance/">Performance</a>, <a class="tag-link" href="/tags/WPF/">WPF</a>, <a class="tag-link" href="/tags/翻译/">翻译</a>
     </div>
 
-                </div>
-            </div>
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>翻译自己的文章才是最骚的。。。  <a href="http://gandalfliang.me/2018/01/17/transparent_4k_window/">Origin Post</a></p>
+<hr>
+<p>要实现一个透明的 WPF 窗口？<br>多么简单的一个任务啊！只要设置 AllowTransparency 和 WindowStyle，你可以在毫秒间完成这个任务。  </p>
+<p><code>AllowTransparency=&quot;True&quot; WindowStyle=&quot;None&quot; Background=&quot;Transparent&quot;</code>   </p>
+<p>正确吧？当然。<br>但是（你懂得），打开你的任务管理器看看，简单的任务通常会带来大量的内存占用，特别是4K分辨率的透明窗口。100+ MB的内存被浪费了，就只为了显示一个空白的透明窗口！这是不可接受的。一年前，如果你说：”谁关心内存呀，现在的内存条太便宜了。“，你可能是对的。但是查查这一年内存条的价格走向，它们现在贵上天了。</p>
+<h2 id="WPF-透明窗口的有趣小真相"><a href="#WPF-透明窗口的有趣小真相" class="headerlink" title="WPF 透明窗口的有趣小真相"></a>WPF 透明窗口的有趣小真相</h2><ul>
+<li><code>内存占用随着窗口尺寸增大而增加</code></li>
+<li><code>Win32 窗口没有这样的问题</code>  </li>
+</ul>
+<p>等等，什么？窗口越大，内存消耗的更多？嗯。。。这看起来很熟悉嘛，就像一个<code>Bitmap</code>。知道现在，我们并不知道 WPF 是如何处理透明窗口的，但是这种症状显示它就好像直接将整个桌面作为一个位图，然后窗口用这张位图的重叠部分作为其背景来更新自己，让它看起来是“透明”的。多么聪明的做法呀。。。<br>在 WPF 刚刚发布的那些日子里，低分辨率的计算机屏幕占据主流位置，即使在今天，大多数的笔记本电脑依然带着一块1366*768分辨率的屏幕被推向市场（离谱吧）。让我们唾弃那些OEM厂商讲的毫无根据的废话并且思考一下运行在高分辨率下的程序的情况。  </p>
+<h2 id="内存并不是免费的，不要浪费之"><a href="#内存并不是免费的，不要浪费之" class="headerlink" title="内存并不是免费的，不要浪费之"></a>内存并不是免费的，不要浪费之</h2><p>很显然，浪费100+MB的内存来显示一个4K的透明窗口是不可接受的，特别是和 Win32 窗口只占用10+MB的内存进行比较时。这差距让 WPF 看起来蠢透了。<br>抱怨已经够多了，想想对此我们能做什么呢？我可不想用C++和GDI将我的UI代码重写一遍，这太没效率并且也跟不上时代，况且，没人会为此“区区小事”去放弃他们漂亮、易于维护的Xaml UI代码。  </p>
+<h2 id="使用-Win32-承载-WPF-内容"><a href="#使用-Win32-承载-WPF-内容" class="headerlink" title="使用 Win32 承载 WPF 内容"></a>使用 Win32 承载 WPF 内容</h2><p>好吧，确实，没人愿意为了区区90MB内存去重写它们的UI。与使用C++重写UI所耗费的精力相比，这个内存的占用差距看起来是可以接受的（#笑脸）。但是请记住，我们一如既往的可以在 Win32 窗口中承载 WPF 的内容。<br>例如，我们想创建一个全屏、半透明背景带着非透明内容的对话框。为了规避 WPF 透明窗口的内存问题，我们可以使用 Win32 创建一个半透明的窗口：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">DWORD Flags1 = WS_EX_LAYERED;</span><br><span class="line">DWORD Flags2 = WS_POPUP;</span><br><span class="line"></span><br><span class="line">HWND hWnd = CreateWindowEx(Flags1,szWindowClass, szTitle, Flags2,</span><br><span class="line">    CW_USEDEFAULT, <span class="number">0</span>, <span class="number">3840</span>,<span class="number">2160</span>, nullptr, nullptr, hInstance, nullptr);</span><br><span class="line"></span><br><span class="line">SetLayeredWindowAttributes(hWnd, RRR, (BYTE)<span class="number">125</span>, LWA_ALPHA);</span><br><span class="line">ShowWindow(hWnd, nCmdShow);</span><br><span class="line">UpdateWindow(hWnd);</span><br><span class="line"></span><br><span class="line"><span class="keyword">case</span> WM_ERASEBKGND:</span><br><span class="line">    RECT rect;</span><br><span class="line">    GetClientRect(hWnd, &amp;rect);</span><br><span class="line">    FillRect((HDC)wParam, &amp;rect, CreateSolidBrush(RGB(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)));</span><br><span class="line">    <span class="keyword">break</span>;</span><br></pre></td></tr></table></figure></p>
+<p>通过启用 <code>C++/CLI</code>，我们可以直接访问 WPF 内容</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">namespace ManagedCode</span><br><span class="line">&#123;</span><br><span class="line">    using namespace System;</span><br><span class="line">    using namespace System::Windows;</span><br><span class="line">    using namespace System::Windows::Interop;</span><br><span class="line">    using namespace System::Windows::Media;</span><br><span class="line"></span><br><span class="line">    HWND GetHwnd(HWND parent, int x, int y, int width, int height) &#123;</span><br><span class="line">    HwndSource^ source = gcnew HwndSource(</span><br><span class="line">        <span class="number">0</span>, <span class="comment">// class style  </span></span><br><span class="line">        WS_VISIBLE | WS_CHILD, <span class="comment">// style  </span></span><br><span class="line">        <span class="number">0</span>, <span class="comment">// exstyle  </span></span><br><span class="line">        x, y, width, height,</span><br><span class="line">        <span class="string">"hi"</span>, <span class="comment">// NAME  </span></span><br><span class="line">        IntPtr(parent)        <span class="comment">// parent window   </span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    UIElement^ page = gcnew ManagedContent::WPFContent();</span><br><span class="line">    source-&gt;RootVisual = page;</span><br><span class="line">    <span class="keyword">return</span> (HWND)source-&gt;Handle.ToPointer();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//managed content</span></span><br><span class="line">ManagedCode::GetHwnd(hWnd, <span class="number">0</span>, <span class="number">0</span>, <span class="number">200</span>, <span class="number">200</span>);</span><br></pre></td></tr></table></figure>
+<p>由于 WPF 和 GDI 背后的技术不尽相同，还有更多的工作需要做来解决不可避免的透明通道问题，但是，为了方便，你始终可以使用 Popup 来实现你的目标。·</p>
+
+        
         </div>
-    
+        <footer class="article-footer">
+            <div class="share-container">
+
+    <div class="jiathis_style">
+    <span class="jiathis_txt">分享到：</span>
+    <a class="jiathis_button_qzone">QQ空间</a>
+    <a class="jiathis_button_tsina">新浪微博</a>
+    <a class="jiathis_button_tqq">腾讯微博</a>
+    <a class="jiathis_button_weixin">微信</a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" target="_blank">更多</a>
+    <a class="jiathis_counter_style"></a>
 </div>
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+<style>
+    .jiathis_style div:first-child:not(.jiadiv_01) {
+        width: auto !important;
+        border: none !important;
+    }
+    .jiathis_style .jiadiv_01 {
+        margin: 10px 0;
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .jiathis_style .jiadiv_01 div:first-child {
+        display: none;
+    }
+    .jiathis_style .jiadiv_02 {
+        padding: 7px 0 !important;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle {
+        width: 85px;
+        border: none;
+        height: auto;
+        margin: 3px 10px;
+        padding: 6px 10px;
+        border-radius: 4px;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:hover {
+        border: none;
+    }
+    .jiathis_style .jiadiv_02 .jiatitle:nth-child(even) {
+        margin-left: 0;
+    }
+    .jiathis_style .jtico:hover {
+        opacity: 1;
+    }
+    .jiathis_style .ckepopBottom,
+    .jiathis_style .centerBottom {
+        width: auto !important;
+        padding: 5px;
+        background: #f7f7f7;
+    }
+</style>
+
+
+
+</div>
+
+            
+    
+        <a href="http://gandalfliang.me/2018/02/16/transparent_4k_window.translate/#comments" class="article-comment-link">评论</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2018/02/12/lightweighted_shadoweffect/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Light Weighted DropshadowEffect</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="uyan_frame"></div>
+
+    
+    </section>
+
 </section>
             
                 <aside id="sidebar">
