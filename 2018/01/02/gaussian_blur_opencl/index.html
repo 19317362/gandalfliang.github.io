@@ -6,15 +6,15 @@
     <title>使用 OpenCL 实现图片高斯模糊 | gandalfliang的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="高斯模糊（ https://zh.wikipedia.org/wiki/%E9%AB%98%E6%96%AF%E6%A8%A1%E7%B3%8A ）是一种常见的图像处理算法，使用高斯分布与图像做卷积，得到模糊的效果。其二维定义：  σ是正态分布的标准偏差。在应用的时候，假设σ为2.5。对于模糊半径为1，则高斯矩阵为3*3的一个矩阵，以[1,1]为中心，带入公式计算高斯矩阵的值，得到：">
-<meta name="keywords" content="OpenCL,高性能计算,高斯模糊,图像处理">
+<meta name="keywords" content="OpenCL,高性能计算,图像处理,高斯模糊">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用 OpenCL 实现图片高斯模糊">
-<meta property="og:url" content="http://gandalfliang.me/2018/01/02/gaussian_blur_opencl/index.html">
+<meta property="og:url" content="https://gandalfliang.github.io/2018/01/02/gaussian_blur_opencl/index.html">
 <meta property="og:site_name" content="gandalfliang的个人博客">
 <meta property="og:description" content="高斯模糊（ https://zh.wikipedia.org/wiki/%E9%AB%98%E6%96%AF%E6%A8%A1%E7%B3%8A ）是一种常见的图像处理算法，使用高斯分布与图像做卷积，得到模糊的效果。其二维定义：  σ是正态分布的标准偏差。在应用的时候，假设σ为2.5。对于模糊半径为1，则高斯矩阵为3*3的一个矩阵，以[1,1]为中心，带入公式计算高斯矩阵的值，得到：">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Normal_Distribution_PDF.svg/360px-Normal_Distribution_PDF.svg.png">
-<meta property="og:updated_time" content="2018-02-12T07:24:58.487Z">
+<meta property="og:updated_time" content="2018-02-12T07:24:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用 OpenCL 实现图片高斯模糊">
 <meta name="twitter:description" content="高斯模糊（ https://zh.wikipedia.org/wiki/%E9%AB%98%E6%96%AF%E6%A8%A1%E7%B3%8A ）是一种常见的图像处理算法，使用高斯分布与图像做卷积，得到模糊的效果。其二维定义：  σ是正态分布的标准偏差。在应用的时候，假设σ为2.5。对于模糊半径为1，则高斯矩阵为3*3的一个矩阵，以[1,1]为中心，带入公式计算高斯矩阵的值，得到：">
@@ -228,7 +228,7 @@
         <div class="article-entry" itemprop="articleBody">
         
             
-            <p>高斯模糊（ <a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E6%96%AF%E6%A8%A1%E7%B3%8A" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E9%AB%98%E6%96%AF%E6%A8%A1%E7%B3%8A</a> ）是一种常见的图像处理算法，使用高斯分布与图像做卷积，得到模糊的效果。其二维定义：<br><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/c36071d89adc2f4da470b45ce05c33ca93744577" alt=""> </p>
+            <p>高斯模糊（ <a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E6%96%AF%E6%A8%A1%E7%B3%8A" target="_blank" rel="external">https://zh.wikipedia.org/wiki/%E9%AB%98%E6%96%AF%E6%A8%A1%E7%B3%8A</a> ）是一种常见的图像处理算法，使用高斯分布与图像做卷积，得到模糊的效果。其二维定义：<br><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/c36071d89adc2f4da470b45ce05c33ca93744577" alt=""> </p>
 <p>σ是正态分布的标准偏差。在应用的时候，假设σ为2.5。对于模糊半径为1，则高斯矩阵为3*3的一个矩阵，以[1,1]为中心，带入公式计算高斯矩阵的值，得到：  </p>
 <table>
 <thead>
@@ -293,7 +293,7 @@
 <p>以下是相关测试结果：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">运行平台: Intel(R) OpenCL</span><br><span class="line">运行设备： Intel(R) HD Graphics 4600</span><br><span class="line">处理图片尺寸：790*501</span><br><span class="line">OpenCL处理耗时: 13.6597 ms</span><br><span class="line"></span><br><span class="line">处理图片尺寸：790*501</span><br><span class="line">常规方法耗时: 11482.9402 ms</span><br><span class="line"></span><br><span class="line">运行平台: Intel(R) OpenCL</span><br><span class="line">运行设备： Intel(R) HD Graphics 4600</span><br><span class="line">处理图片尺寸：1339*693</span><br><span class="line">OpenCL处理耗时: 33.0095 ms</span><br><span class="line"></span><br><span class="line">处理图片尺寸：1339*693</span><br><span class="line">常规方法耗时: 26908.9926 ms</span><br><span class="line"></span><br><span class="line">运行平台: Intel(R) OpenCL</span><br><span class="line">运行设备： Intel(R) HD Graphics 4600</span><br><span class="line">处理图片尺寸：1920*1080</span><br><span class="line">OpenCL处理耗时: 51.3885 ms</span><br><span class="line"></span><br><span class="line">处理图片尺寸：1920*1080</span><br><span class="line">常规方法耗时: 60147.3815 ms</span><br></pre></td></tr></table></figure></p>
 <p>当然，常规方法都只使用了单线程，还未发挥多核CPU的威力，然而，可以预见的是，即使是使用多线程，提升也是有限的。</p>
 <p>原图：<br><img src="http://omg3ewm0l.bkt.clouddn.com/screen_shot_gaus.png" alt=""><br>高斯模糊：<br><img src="http://omg3ewm0l.bkt.clouddn.com/processed_cl.bmp" alt=""></p>
-<p>代码： <a href="https://github.com/gandalfliang/cloo_netstandard/tree/temp" target="_blank" rel="noopener">https://github.com/gandalfliang/cloo_netstandard/tree/temp</a> </p>
+<p>代码： <a href="https://github.com/gandalfliang/cloo_netstandard/tree/temp" target="_blank" rel="external">https://github.com/gandalfliang/cloo_netstandard/tree/temp</a> </p>
 <font size="4" color="red">Update: 在nVidia的环境下会导致处理后的图片出现花屏现象，估计是cl代码的问题，又或者是nVidia的驱动有问题？下次再更新</font>
         
         </div>
@@ -357,7 +357,7 @@
 
             
     
-        <a href="http://gandalfliang.me/2018/01/02/gaussian_blur_opencl/#comments" class="article-comment-link">评论</a>
+        <a href="https://gandalfliang.github.io/2018/01/02/gaussian_blur_opencl/#comments" class="article-comment-link">评论</a>
     
 
         </footer>

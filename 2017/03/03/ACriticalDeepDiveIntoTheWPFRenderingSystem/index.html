@@ -6,15 +6,15 @@
     <title>深挖 WPF 渲染系统 | gandalfliang的个人博客</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="这是一篇2011年的文章，原地址在 A Critical Deep Dive into the WPF Rendering System，个人认为到现在都可以给WPF程序开发人员作为一个参考，里面详细讲述了 WPF 这个号称从底层支持硬件加速的 UI 框架为什么有时候看起来并不是那么回事的原因。以下是正文。  刚开始我并不认为我会发表这篇文章。在被一些我高度重视的人说服后，我决定要发表这篇文章。那">
-<meta name="keywords" content="WPF,GPU,渲染,DirectX,翻译">
+<meta name="keywords" content="WPF,DirectX,GPU,渲染,翻译">
 <meta property="og:type" content="article">
 <meta property="og:title" content="深挖 WPF 渲染系统">
-<meta property="og:url" content="http://gandalfliang.me/2017/03/03/ACriticalDeepDiveIntoTheWPFRenderingSystem/index.html">
+<meta property="og:url" content="https://gandalfliang.github.io/2017/03/03/ACriticalDeepDiveIntoTheWPFRenderingSystem/index.html">
 <meta property="og:site_name" content="gandalfliang的个人博客">
 <meta property="og:description" content="这是一篇2011年的文章，原地址在 A Critical Deep Dive into the WPF Rendering System，个人认为到现在都可以给WPF程序开发人员作为一个参考，里面详细讲述了 WPF 这个号称从底层支持硬件加速的 UI 框架为什么有时候看起来并不是那么回事的原因。以下是正文。  刚开始我并不认为我会发表这篇文章。在被一些我高度重视的人说服后，我决定要发表这篇文章。那">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://jeremiahmorrill.files.wordpress.com/2011/02/clip_image004_thumb.png?w=481&h=476">
-<meta property="og:updated_time" content="2018-02-12T07:24:58.486Z">
+<meta property="og:updated_time" content="2018-02-12T07:24:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="深挖 WPF 渲染系统">
 <meta name="twitter:description" content="这是一篇2011年的文章，原地址在 A Critical Deep Dive into the WPF Rendering System，个人认为到现在都可以给WPF程序开发人员作为一个参考，里面详细讲述了 WPF 这个号称从底层支持硬件加速的 UI 框架为什么有时候看起来并不是那么回事的原因。以下是正文。  刚开始我并不认为我会发表这篇文章。在被一些我高度重视的人说服后，我决定要发表这篇文章。那">
@@ -228,7 +228,7 @@
         <div class="article-entry" itemprop="articleBody">
         
             
-            <p>这是一篇2011年的文章，原地址在 <a href="https://jeremiahmorrill.wordpress.com/2011/02/14/a-critical-deep-dive-into-the-wpf-rendering-system/" target="_blank" rel="noopener">A Critical Deep Dive into the WPF Rendering System</a>，个人认为到现在都可以给WPF程序开发人员作为一个参考，里面详细讲述了 WPF 这个号称从底层支持硬件加速的 UI 框架为什么有时候看起来并不是那么回事的原因。以下是正文。</p>
+            <p>这是一篇2011年的文章，原地址在 <a href="https://jeremiahmorrill.wordpress.com/2011/02/14/a-critical-deep-dive-into-the-wpf-rendering-system/" target="_blank" rel="external">A Critical Deep Dive into the WPF Rendering System</a>，个人认为到现在都可以给WPF程序开发人员作为一个参考，里面详细讲述了 WPF 这个号称从底层支持硬件加速的 UI 框架为什么有时候看起来并不是那么回事的原因。以下是正文。</p>
 <hr>
 <p>刚开始我并不认为我会发表这篇文章。在被一些我高度重视的人说服后，我决定要发表这篇文章。那些深入投入微软UX平台的程序员应该更加深入了解这个平台内部是怎么工作的，当他们撞到一睹石墙的时候，他们可以清晰了解到问题所在并且更加准确地沟通他们希望平台做出怎样的改变。</p>
 <h2 id="我相信-WPF-和-Silverlight-是精心打造的技术，但是…"><a href="#我相信-WPF-和-Silverlight-是精心打造的技术，但是…" class="headerlink" title="我相信 WPF 和 Silverlight 是精心打造的技术，但是…"></a><strong>我相信 WPF 和 Silverlight 是精心打造的技术，但是…</strong></h2><p>如果这几个月你有关注我的Twitter，你也许会发现我一直在吐槽WPF（Silverlight也一样）的性能。为什么我会这样做？毕竟这些年我花费了大量的时间为这个平台布道、写库、社区帮助和指导等等。准确来讲，我个人全身投入到这个平台里面，我希望这个平台越来越好。</p>
@@ -259,8 +259,8 @@
 <p><img src="https://jeremiahmorrill.files.wordpress.com/2011/02/clip_image009_thumb.png?w=292&amp;h=293" alt=""></p>
 <p>还记得WPF渲染一个描边的圆形需要多少次绘制调用吗？以及多少顶点缓存区被锁定？Direct2D只需要1次绘制调用。这是曲面细分看起来的样子：</p>
 <p><img src="https://jeremiahmorrill.files.wordpress.com/2011/02/clip_image010_thumb.png?w=402&amp;h=659" alt=""></p>
-<p>Direct2D尝试在一次中尽量绘制多地内容，最大化GPU使用并且最小化不必要的CPU负载。在这篇文章<a href="https://msdn.microsoft.com/en-us/magazine/dd861344.aspx" target="_blank" rel="noopener">“Insights: Direct2D Rendering”</a>底部，Mark Lawrence，使用大量细节解释了Direct2D的工作方式。你深入了解会发现，即使Direct2D运行的非常快，在很多方面它都可以在第二版本中进行改进。相信Direct2D的第二版会支持DX11的硬件曲面细分技术想必也不是那么不合逻辑。</p>
-<p>查阅Direct2D的API，说其中很多代码就是从WPF里面拿的，也不是什么疯狂的想法。如果你看这个老<a href="http://channel9.msdn.com/Blogs/Charles/Michael-Wallent-Advent-and-Evolution-of-WPF" target="_blank" rel="noopener">视频</a>,Micheal Wallent确实说过从这项技术上去创造一个原生的GDI技术作为替代。它有相似的几何图形API和命名。内部也坐着很多相同的事情，但是却更加优化和现代。</p>
+<p>Direct2D尝试在一次中尽量绘制多地内容，最大化GPU使用并且最小化不必要的CPU负载。在这篇文章<a href="https://msdn.microsoft.com/en-us/magazine/dd861344.aspx" target="_blank" rel="external">“Insights: Direct2D Rendering”</a>底部，Mark Lawrence，使用大量细节解释了Direct2D的工作方式。你深入了解会发现，即使Direct2D运行的非常快，在很多方面它都可以在第二版本中进行改进。相信Direct2D的第二版会支持DX11的硬件曲面细分技术想必也不是那么不合逻辑。</p>
+<p>查阅Direct2D的API，说其中很多代码就是从WPF里面拿的，也不是什么疯狂的想法。如果你看这个老<a href="http://channel9.msdn.com/Blogs/Charles/Michael-Wallent-Advent-and-Evolution-of-WPF" target="_blank" rel="external">视频</a>,Micheal Wallent确实说过从这项技术上去创造一个原生的GDI技术作为替代。它有相似的几何图形API和命名。内部也坐着很多相同的事情，但是却更加优化和现代。</p>
 <h2 id="那Silverlight呢？"><a href="#那Silverlight呢？" class="headerlink" title="那Silverlight呢？"></a><strong>那Silverlight呢？</strong></h2><p>我会深入讲Silverlight，但可能有点多余。Silverlight的渲染性能是低效的，但是因为另外的方式。它在CPU上进行栅格化（即使是着色器，如果我没记错的话，是使用汇编语言写的），但是CPU起码比GPU慢10-30倍。这导致你只有相当少的能力渲染UI，甚至更少的能力给到程序逻辑。它的硬件加速是非常基础的，并且几乎和WPF的Cache Composition一样，对于每个BitmapCached图像都要调用一次绘制调用。</p>
 <h2 id="我们能怎样做？"><a href="#我们能怎样做？" class="headerlink" title="我们能怎样做？"></a><strong>我们能怎样做？</strong></h2><p>这是一个我的客户在使用WPF或者Silverlight遇到性能问题时提到的共同问题。不幸的是，我也没有一个答复给到他们。有些可以为了他们特定的需求使用自己的框架。其他的，我尽量倾听，但是他们必须忍受它，毕竟并没有其他丰富的选择来替代WPF和Silverlight。</p>
 
@@ -326,7 +326,7 @@
 
             
     
-        <a href="http://gandalfliang.me/2017/03/03/ACriticalDeepDiveIntoTheWPFRenderingSystem/#comments" class="article-comment-link">评论</a>
+        <a href="https://gandalfliang.github.io/2017/03/03/ACriticalDeepDiveIntoTheWPFRenderingSystem/#comments" class="article-comment-link">评论</a>
     
 
         </footer>
