@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://gandalfliang.github.io/"/>
-  <updated>2018-07-21T02:51:04.753Z</updated>
+  <updated>2018-07-21T02:53:07.016Z</updated>
   <id>https://gandalfliang.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://gandalfliang.github.io/2018/07/16/filtering-in-business-logic/"/>
     <id>https://gandalfliang.github.io/2018/07/16/filtering-in-business-logic/</id>
     <published>2018-07-16T15:50:00.000Z</published>
-    <updated>2018-07-21T02:51:04.753Z</updated>
+    <updated>2018-07-21T02:53:07.016Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="Pipe-and-Filter"><a href="#Pipe-and-Filter" class="headerlink" title="Pipe and Filter"></a>Pipe and Filter</h2><p>在一些应用的开发场景中，例如，大量的数据处理、需要对数据进行大量的转换和过滤，使用管道和<code>Filter</code>是一个很好的选择。对于这种应用场景，一般都需要处理业务足够灵活，并且足够健壮。想象一下，为了实现相应的过滤功能，使用大量的<code>if</code>或者<code>switch case</code>,日后维护这套代码的人估计也会抓狂的吧，单元测试编写起来，应该也够呛吧。</p><h2 id="用Filter来处理业务"><a href="#用Filter来处理业务" class="headerlink" title="用Filter来处理业务"></a>用<code>Filter</code>来处理业务</h2><p>Filter一般都被认为是用来处理数据的，其实，更近一步，用来”处理”业务，也不为一种好办法。当然，这里的处理，并不是说在Filter中执行业务，考虑到业务都是一些耗时（但不绝对）的操作，在管道中处理业务是不对的，这样会堵塞整条管道。相反地，我们的业务依赖管道中的数据，我们希望在数据处理的过程中，由数据的处理来触发特定的业务，因此，我们定义一种BusinessFilter，其不对数据进行处理，而是作为一种窥探，“假装”自己是在进行数据处理，实际是根据数据的实际来通知外界做相应的业务而已。<br><img src="/2018/07/16/filtering-in-business-logic/pipe.png">  </p><h2 id="灵活性"><a href="#灵活性" class="headerlink" title="灵活性"></a>灵活性</h2><p>正如上图的结构，搭积木式的链式结构可以根据业务的调整进行对应的调整，不同的业务可以在通道中穿插。</p><h2 id="健壮性"><a href="#健壮性" class="headerlink" title="健壮性"></a>健壮性</h2><p>一般来说，管道/Filter结构一旦确定，会做大调整的几率都不高。由于Filter的存在，所有的变动在改动之前就可以确定影响范围，而且可以限制调整带来的结构变动。</p><h2 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h2><ul><li>几乎所有的Pipe/Filter结构都是线性结构，这种情况限制了async/await的应用</li><li>如果一个Filter只接受一种数据类型，那么存在的数据转换会降低我们系统的性能，特别地，如果是C#，进行引用类型和值类型的转换，频繁的装箱拆箱也会降低我们系统的性能；为了解决这种问题，限制Filter可接受的数据类型，这样就不能随意连接Filter到所有数据类型，通用性降低。</li><li>…</li></ul>]]></content>
+    <content type="html"><![CDATA[<h2 id="Pipe-and-Filter"><a href="#Pipe-and-Filter" class="headerlink" title="Pipe and Filter"></a>Pipe and Filter</h2><p>在一些应用的开发场景中，例如，大量的数据处理、需要对数据进行大量的转换和过滤，使用管道和<code>Filter</code>是一个很好的选择。对于这种应用场景，一般都需要处理业务足够灵活，并且足够健壮。想象一下，为了实现相应的过滤功能，使用大量的<code>if</code>或者<code>switch case</code>,日后维护这套代码的人估计也会抓狂的吧，单元测试编写起来，应该也够呛吧。</p><h2 id="用Filter来处理业务"><a href="#用Filter来处理业务" class="headerlink" title="用Filter来处理业务"></a>用<code>Filter</code>来处理业务</h2><p>Filter一般都被认为是用来处理数据的，其实，更近一步，用来”处理”业务，也不失为一种好办法。当然，这里的处理，并不是说在Filter中执行业务，考虑到业务都是一些耗时（但不绝对）的操作，在管道中处理业务是不对的，这样会堵塞整条管道。相反地，我们的业务依赖管道中的数据，我们希望在数据处理的过程中，由数据的处理来触发特定的业务，因此，我们定义一种BusinessFilter，其不对数据进行处理，而是作为一种窥探，“假装”自己是在进行数据处理，实际是根据数据的实际来通知外界做相应的业务而已。<br><img src="/2018/07/16/filtering-in-business-logic/pipe.png">  </p><h2 id="灵活性"><a href="#灵活性" class="headerlink" title="灵活性"></a>灵活性</h2><p>正如上图的结构，搭积木式的链式结构可以根据业务的调整进行对应的调整，不同的业务可以在通道中穿插。</p><h2 id="健壮性"><a href="#健壮性" class="headerlink" title="健壮性"></a>健壮性</h2><p>一般来说，管道/Filter结构一旦确定，会做大调整的几率都不高。由于Filter的存在，所有的变动在改动之前就可以确定影响范围，而且可以限制调整带来的结构变动。</p><h2 id="存在的问题"><a href="#存在的问题" class="headerlink" title="存在的问题"></a>存在的问题</h2><ul><li>几乎所有的Pipe/Filter结构都是线性结构，这种情况限制了async/await的应用</li><li>如果一个Filter只接受一种数据类型，那么存在的数据转换会降低我们系统的性能，特别地，如果是C#，进行引用类型和值类型的转换，频繁的装箱拆箱也会降低我们系统的性能；为了解决这种问题，限制Filter可接受的数据类型，这样就不能随意连接Filter到所有数据类型，通用性降低。</li><li>…</li></ul>]]></content>
     
     <summary type="html">
     
